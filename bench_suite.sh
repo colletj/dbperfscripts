@@ -45,13 +45,16 @@ else
   #mysql -u"$dbtestusr" -p"$dbtestpwd" -D'sbtest' -e "drop table sbtest1"
 fi
 
-# prepare RW benchmark 
+
+
+echo " benchmark"
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size=1000000 prepare 
-
-# run it
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size=1000000 run 
-
-# clean up
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size=1000000 cleanup 
 
+
+echo "Select random points benchmark"
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size=1000000 prepare 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size=1000000 run 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size=1000000 cleanup 
 exit
