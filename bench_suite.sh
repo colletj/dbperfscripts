@@ -40,16 +40,18 @@ then
   mysqladmin -u"$dbtestusr" -p"$dbtestpwd" create sbtest -f 2&>1 /dev/null ; echo $?
 else
   echo "Database sbtest found."
-  echo "Reset sbtable1..."
+  #echo "Reset sbtable1..."
   #mysqladmin -u"$dbtestusr" -p"$dbtestpwd" drop sbtest -f 2&>1 /dev/null ; echo $?
-  mysql -u"$dbtestusr" -p"$dbtestpwd" -D'sbtest' -e "drop table sbtest1"
+  #mysql -u"$dbtestusr" -p"$dbtestpwd" -D'sbtest' -e "drop table sbtest1"
 fi
 
 # prepare RW benchmark 
-sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size=100 prepare 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size=1000000 prepare 
 
 # run it
-sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size=100 run 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size=1000000 run 
 
+# clean up
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads=4 --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size=1000000 cleanup 
 
 exit
