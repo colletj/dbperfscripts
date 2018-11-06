@@ -14,6 +14,10 @@ with OPTIONS
     -T number of parallel thread
 "
 
+#Default values:
+threadnum=8;
+tablesize=5000;
+
 while getopts 'hp:u:t:T:' opt; do
   case "$opt" in
     h) echo "$usage"
@@ -38,6 +42,8 @@ while getopts 'hp:u:t:T:' opt; do
   esac
 done
 shift $((OPTIND - 1))
+
+if [[ -z $dbtestpwd || -z $dbtestusr ]]; then echo "No db credentials provided. Exiting..."; exit; fi
 
 mysqlshow -u"$dbtestusr" -p"$dbtestpwd" | grep -Eo "sbtest" > /dev/null;
 if [ $? -eq 1 ]; 
