@@ -59,12 +59,12 @@ fi
 
 echo "RW benchmark"
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size="$tablesize" prepare 
-/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --time=40 --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" cleanup 
 
 echo "Select random points benchmark"
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size="$tablesize" prepare 
-/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua  --time=40 --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" cleanup 
 
 exit
