@@ -11,14 +11,16 @@ with OPTIONS
     -p db password
     -u db user
     -t benchmark table size
+    -l bench len in s
     -T number of parallel thread
 "
 
 #Default values:
 threadnum=8;
 tablesize=5000;
+time=40;
 
-while getopts 'hp:u:t:T:' opt; do
+while getopts 'hp:u:t:T:l:' opt; do
   case "$opt" in
     h) echo "$usage"
        exit
@@ -30,6 +32,8 @@ while getopts 'hp:u:t:T:' opt; do
     t) tablesize=$OPTARG
        ;;
     T) threadnum=$OPTARG
+       ;;
+    l) time=$OPTARG
        ;;
     :) printf "missing argument for -%s\n" "$OPTARG" >&2
        echo "$usage" >&2
@@ -59,17 +63,17 @@ fi
 
 echo "RW benchmark"
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size="$tablesize" prepare 
-/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --time=40 --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --time="$time" --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_read_write.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" cleanup 
 
 echo "Select random points benchmark"
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size="$tablesize" prepare 
-/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua  --time=40 --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua  --time="$time" --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/select_random_points.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" cleanup 
 
 echo "Select random points benchmark"
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_write_only.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd"  --table-size="$tablesize" prepare 
-/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_write_only.lua  --time=40 --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
+/usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_write_only.lua  --time="$time" --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" run 
 /usr/bin/time -f "performed in: %e secs\nCPU: %P" sysbench /usr/share/sysbench/oltp_write_only.lua --threads="$threadnum" --mysql-host=127.0.0.1 --db-driver=mysql --mysql-user="$dbtestusr" --mysql-password="$dbtestpwd" --table-size="$tablesize" cleanup 
 
 
